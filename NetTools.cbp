@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="NetTools" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/NetTools" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/NetTools" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add directory="backend/npcap/Include" />
+		</Compiler>
+		<Linker>
+			<Add library="gdi32" />
+			<Add library="user32" />
+			<Add library="kernel32" />
+			<Add library="comctl32" />
+			<Add library="ws2_32" />
+			<Add library="iphlpapi" />
+			<Add library="backend/npcap/Lib/Packet.lib" />
+			<Add library="backend/npcap/Lib/wpcap.lib" />
+			<Add library="backend/npcap/Lib/x64/*" />
+		</Linker>
+		<Unit filename="backend/ARPSpoof.h" />
+		<Unit filename="backend/NetScan.h" />
+		<Unit filename="backend/adapter.h" />
+		<Unit filename="backend/device.h" />
+		<Unit filename="backend/includes.h" />
+		<Unit filename="backend/proto.h" />
+		<Unit filename="backend/proto/ARP.h" />
+		<Unit filename="backend/proto/DNS.h" />
+		<Unit filename="backend/proto/ETH.h" />
+		<Unit filename="backend/proto/ICMP.h" />
+		<Unit filename="backend/proto/IP.h" />
+		<Unit filename="backend/proto/NBNS.h" />
+		<Unit filename="backend/proto/RTP.h" />
+		<Unit filename="backend/proto/TCP.h" />
+		<Unit filename="backend/proto/UDP.h" />
+		<Unit filename="backend/tools.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
