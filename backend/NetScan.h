@@ -17,6 +17,8 @@ private:
     BOOL isFind   = FALSE;
     BOOL isJoined = TRUE;
 
+    BOOL fARPWatch = FALSE;
+
     thread thSend, thCapture;
 
     UINT sip = 0, dip = 0;
@@ -43,11 +45,23 @@ private:
             if(!buf || !isARP(buf)) continue;
 
             PARP arp = getARP(buf);
-            if(arp->oper == ARP_OPER_REPLY || arp->tip == adp->address().ip){
-                for(int i = 0; i < data.size(); i++){
-                    if(data[i].ip == arp->sip) return;
+            BOOL skip = FALSE;
+            if(fARPWatch){
+                for(int i = 0; i < data.size(); i++) if(data[i].ip == arp->sip){
+                    skip = TRUE;
+                    break;
                 }
+                if(skip) continue;
                 data.push_back(DEVADDR(arp->smac, arp->sip));
+            }else{
+                if(arp->oper == ARP_OPER_REPLY || arp->tip == adp->address().ip){
+                    for(int i = 0; i < data.size(); i++) if(data[i].ip == arp->sip){
+                        skip = TRUE;
+                        break;
+                    }
+                    if(skip) continue;
+                    data.push_back(DEVADDR(arp->smac, arp->sip));
+                }
             }
         }
     }
@@ -62,6 +76,10 @@ public:
         scanTime = Time;
     }
 
+    void switchARPWatch(){
+        fARPWatch = (fARPWatch ? FALSE : TRUE);
+    }
+
     void scan(UINT Sip, UINT Dip){
         sip = Sip;
         dip = Dip;
@@ -73,13 +91,10 @@ public:
     }
 
     void join(){
-        cout<<"Begin join"<<endl;
         isWork   = FALSE;
         isJoined = TRUE;
         thSend.join();
-        cout<<"Send join"<<endl;
         thCapture.join();
-        cout<<"Capture join"<<endl;
     }
 };
 

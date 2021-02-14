@@ -77,28 +77,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
         case WM_CREATE: {
             ///onCreate
             adp.enumAdapters();
+            cout<<"Adapters: "<<endl;
             for(int i = 0; i < adp.nAdapters(); i++){
-                cout<<i+1<<". "<<adp.getAdapter(i)->Description<<endl;
+                cout<<"  "<<i+1<<". "<<adp.getAdapter(i)->Description<<endl;
             }
-            adp.open(0);
+            int iAdp;
+            cout<<"Choose adapter: ";
+            cin>>iAdp;
+            adp.open(iAdp - 1);
 
             scan.setAdapter(&adp);
-            scan.setScanTime(3000);
+
+            UINT tScan = 0;
+            cout<<"Scan time (ms): ";
+            cin>>tScan;
+            scan.setScanTime(tScan);
+
+            CHAR fARP = 0;
+            cout<<"Enable ARPWatch (y/n): ";
+            cin>>fARP;
+            if(fARP == 'y')
+                scan.switchARPWatch();
             scan.scan(adp.address().ip & adp.address().mask, (adp.address().ip & adp.address().mask) | ~adp.address().mask);
 
-            //scan.join();
-            Sleep(3000);
+            Sleep(tScan);
 
-            char addr[4];
             for(int i = 0; i < scan.data.size(); i++){
                 cout<<i+1<<". ";
                 printIP(ntohl(scan.data[i].ip));
                 cout<<endl;
             }
-
-            //spoof.setAdapter(&adp);
-            //spoof.spoof({ntohl(inet_addr("192.168.1.125")), 0, 0, {0x00, 0x14, 0x85, 0x83, 0x03, 0xc8}}, adp.gateway());
-
             break;
         }
         case WM_PAINT: {
